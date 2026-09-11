@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Login from "../pages/Login";
 import AccessDenied from "../pages/AccessDenied";
@@ -8,14 +8,17 @@ import AgentDashboard from "../dashboards/AgentDashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleGuard from "./RoleGuard";
 import RoleRedirect from "./RoleRedirect";
+import Layout from "../components/Layout";
 
 export default function AppRouter() {
     return (
         <BrowserRouter>
+
             <Routes>
                 <Route path="/" element={<RoleRedirect />} />
-
                 <Route path="/login" element={<Login />} />
+
+                <Route element={<Layout />} >
                 <Route path="/access-denied" element={<AccessDenied />} />
 
                 <Route element={<ProtectedRoute />}>
@@ -29,6 +32,7 @@ export default function AppRouter() {
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     );
