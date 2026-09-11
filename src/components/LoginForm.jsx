@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import loginSchema from "../validation/loginSchema";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth.js";
 import dlmsIconMark from "../assets/dlms_icon_mark.png";
 
 const LoginForm = () => {
@@ -19,17 +19,24 @@ const LoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = async (data) => {
-    setServerError("");
-    try {
-      await login(data.email, data.password);
-      navigate("/dashboard");
-    } catch (err) {
-      setServerError(
-        err.response?.data?.message || "Email ou mot de passe incorrect",
-      );
-    }
-  };
+    const onSubmit = async (data) => {
+        setServerError("");
+        try {
+            const loggedInUser = await login(data.email, data.password);
+
+            if (loggedInUser.role === "ADMIN") {
+                navigate("/admin/dashboard");
+            } else if (loggedInUser.role === "AGENT") {
+                navigate("/agent/dashboard");
+            } else {
+                navigate("/access-denied");
+            }
+        } catch (err) {
+            setServerError(
+                err.response?.data?.message || "Email ou mot de passe incorrect",
+            );
+        }
+    };
 
   return (
     <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
