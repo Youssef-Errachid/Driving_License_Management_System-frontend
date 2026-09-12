@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "../pages/Login";
 import AccessDenied from "../pages/AccessDenied";
 import NotFound from "../pages/NotFound";
+import ComingSoon from "../pages/ComingSoon";
 import AdminDashboard from "../dashboards/AdminDashboard";
 import AgentDashboard from "../dashboards/AgentDashboard";
 import ProtectedRoute from "./ProtectedRoute";
@@ -19,19 +20,36 @@ export default function AppRouter() {
                 <Route path="/login" element={<Login />} />
 
                 <Route element={<Layout />} >
-                <Route path="/access-denied" element={<AccessDenied />} />
+                    <Route path="/access-denied" element={<AccessDenied />} />
 
-                <Route element={<ProtectedRoute />}>
-                    <Route element={<RoleGuard allowedRoles={["ADMIN"]} />}>
-                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route element={<ProtectedRoute />}>
+                        <Route element={<RoleGuard allowedRoles={["ADMIN"]} />}>
+                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                            <Route path="/admin/requests" element={<ComingSoon title="Gestion des demandes" />} />
+                            <Route path="/admin/exams" element={<ComingSoon title="Gestion des examens" />} />
+                            <Route path="/admin/licenses" element={<ComingSoon title="Gestion des permis" />} />
+                            <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
+                            <Route path="/admin/users" element={<ComingSoon title="Gestion des utilisateurs" />} />
+                            <Route path="/admin/settings" element={<ComingSoon title="Configuration du système" />} />
+                        </Route>
+
+                        <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
+                            <Route path="/agent/dashboard" element={<AgentDashboard />} />
+                            <Route path="/agent/persons" element={<ComingSoon title="Gestion des personnes" />} />
+                            <Route path="/agent/requests" element={<ComingSoon title="Gestion des demandes" />} />
+                            <Route path="/agent/exams" element={<ComingSoon title="Gestion des examens" />} />
+                            <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
+                            <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
+
+                            <Route path="/agent/persons/new" element={<ComingSoon title="Enregistrer une personne" />} />
+                            <Route path="/agent/requests/new" element={<ComingSoon title="Nouvelle demande" />} />
+                            <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
+                            <Route path="/agent/licenses/new" element={<ComingSoon title="Délivrer un permis" />} />
+                            <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />
+                        </Route>
                     </Route>
 
-                    <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
-                        <Route path="/agent/dashboard" element={<AgentDashboard />} />
-                    </Route>
-                </Route>
-
-                <Route path="*" element={<NotFound />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>
