@@ -74,10 +74,11 @@ const AgentDashboard = () => {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 rounded-2xl border-2 border-dashed border-blue-300 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 rounded-2xl p-4">
                 <StatCard
                     icon={FileText}
                     title="Demandes du jour"
+
                     value={isLoading ? "…" : data?.requestsToday ?? 0}
                 />
                 <StatCard
