@@ -12,6 +12,7 @@ import RoleRedirect from "./RoleRedirect";
 import Layout from "../components/Layout";
 import PersonList from "../pages/PersonList.jsx";
 import PersonForm from "../pages/PersonForm.jsx";
+import PersonDetail from "../pages/PersonDetail.jsx";
 
 export default function AppRouter() {
     return (
@@ -32,24 +33,23 @@ export default function AppRouter() {
                             <Route path="/admin/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
                             <Route path="/admin/users" element={<ComingSoon title="Gestion des utilisateurs" />} />
-                            <Route path="/admin/settings" element={<ComingSoon title="Configuration du système" />} />
+                            <Route path="/admin/settings" element={<ComingSoon title="Configuration du systeme" />} />
                         </Route>
 
                         <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
                             <Route path="/agent/dashboard" element={<AgentDashboard />} />
                             <Route path="/agent/persons" element={<PersonList />} />
-                            <Route path="/agent/persons/:id" element={<ComingSoon title="Détail de la personne" />} />
                             <Route path="/agent/persons/new" element={<PersonForm />} />
                             <Route path="/agent/persons/:id/edit" element={<PersonForm />} />
+                            <Route path="/agent/persons/:id" element={<PersonDetail />} />
                             <Route path="/agent/requests" element={<ComingSoon title="Gestion des demandes" />} />
                             <Route path="/agent/exams" element={<ComingSoon title="Gestion des examens" />} />
                             <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
 
-                            <Route path="/agent/persons/new" element={<ComingSoon title="Enregistrer une personne" />} />
                             <Route path="/agent/requests/new" element={<ComingSoon title="Nouvelle demande" />} />
                             <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
-                            <Route path="/agent/licenses/new" element={<ComingSoon title="Délivrer un permis" />} />
+                            <Route path="/agent/licenses/new" element={<ComingSoon title="Delivrer un permis" />} />
                             <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />
                         </Route>
                     </Route>
