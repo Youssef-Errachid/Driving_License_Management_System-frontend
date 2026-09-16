@@ -1,11 +1,6 @@
 import * as yup from "yup";
 
-const personSchema = yup.object({
-    nationalNumber: yup
-        .string()
-        .trim()
-        .required("Le numéro national est obligatoire"),
-
+const personUpdateSchema = yup.object({
     firstName: yup
         .string()
         .trim()
@@ -15,12 +10,6 @@ const personSchema = yup.object({
         .string()
         .trim()
         .required("Le nom est obligatoire"),
-
-    birthDay: yup
-        .date()
-        .typeError("La date de naissance est invalide")
-        .max(new Date(), "La date de naissance doit être dans le passé")
-        .required("La date de naissance est obligatoire"),
 
     address: yup
         .string()
@@ -40,7 +29,7 @@ const personSchema = yup.object({
         .string()
         .trim()
         .email("Format email invalide")
-        .required("Email est obligatoire"),
+        .nullable(),
 
     nationality: yup
         .string()
@@ -58,4 +47,4 @@ const personSchema = yup.object({
         .nullable(),
 });
 
-export default personSchema;
+export default personUpdateSchema;
