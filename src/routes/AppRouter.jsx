@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import RoleGuard from "./RoleGuard";
 import RoleRedirect from "./RoleRedirect";
 import Layout from "../components/Layout";
+import PersonList from "../pages/PersonList.jsx";
 
 export default function AppRouter() {
     return (
@@ -35,8 +36,8 @@ export default function AppRouter() {
 
                         <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
                             <Route path="/agent/dashboard" element={<AgentDashboard />} />
-                            <Route path="/agent/persons" element={<ComingSoon title="Gestion des personnes" />} />
-                            <Route path="/agent/requests" element={<ComingSoon title="Gestion des demandes" />} />
+                            <Route path="/agent/persons" element={<PersonList />} />
+                            <Route path="/agent/persons/:id" element={<ComingSoon title="Détail de la personne" />} />                            <Route path="/agent/requests" element={<ComingSoon title="Gestion des demandes" />} />
                             <Route path="/agent/exams" element={<ComingSoon title="Gestion des examens" />} />
                             <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
