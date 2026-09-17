@@ -14,6 +14,7 @@ import PersonList from "../pages/PersonList.jsx";
 import PersonForm from "../pages/PersonForm.jsx";
 import PersonDetail from "../pages/PersonDetail.jsx";
 import RequestList from "../pages/RequestList.jsx";
+import RequestDetail from "../pages/RequestDetail.jsx";
 
 export default function AppRouter() {
     return (
@@ -48,7 +49,7 @@ export default function AppRouter() {
                             <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
 
-                            <Route path="/agent/requests/new" element={<ComingSoon title="Nouvelle demande" />} />
+                            <Route path="/agent/requests/:id" element={<RequestDetail />} />
                             <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
                             <Route path="/agent/licenses/new" element={<ComingSoon title="Delivrer un permis" />} />
                             <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />

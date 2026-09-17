@@ -170,6 +170,13 @@ const RequestList = () => {
                                             Annuler
                                         </button>
                                     )}
+                                    <Link
+                                        to={`/agent/requests/${request.id}`}
+                                        className="text-gray-400 hover:text-gray-600"
+                                        aria-label="Voir le détail"
+                                    >
+                                        <Eye className="h-4 w-4" />
+                                    </Link>
                                 </div>
                             </div>
                         </div>
