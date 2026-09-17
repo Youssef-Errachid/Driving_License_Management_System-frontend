@@ -17,6 +17,7 @@ import RequestList from "../pages/RequestList.jsx";
 import RequestDetail from "../pages/RequestDetail.jsx";
 import RequestForm from "../pages/RequestForm.jsx";
 import ExamTypeSettings from "../pages/ExamTypeSettings.jsx";
+import ExamList from "../pages/ExamList.jsx";
 
 export default function AppRouter() {
     return (
@@ -47,7 +48,7 @@ export default function AppRouter() {
                             <Route path="/agent/persons/:id/edit" element={<PersonForm />} />
                             <Route path="/agent/persons/:id" element={<PersonDetail />} />
                             <Route path="/agent/requests" element={<RequestList />} />
-                            <Route path="/agent/exams" element={<ComingSoon title="Gestion des examens" />} />
+                            <Route path="/agent/exams" element={<ExamList />} />
                             <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
 
