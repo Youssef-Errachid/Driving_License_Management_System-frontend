@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import requestSchema, { SERVICE_TYPES } from "../validation/requestSchema";
 import requestService from "../api/services/requestService";
 import personService from "../api/services/personService";
 import { useLicenseCategories } from "../hooks/useLicenseCategories";
+import { usePersonLicenses } from "../hooks/usePersonLicenses";
 
 const SERVICE_TYPE_LABELS = {
     NEW_LICENSE: "Nouveau Permis",
@@ -45,7 +46,6 @@ const RequestForm = () => {
     const {
         register,
         handleSubmit,
-        control,
         watch,
         setValue,
         formState: { errors, isSubmitting },
@@ -55,7 +55,12 @@ const RequestForm = () => {
 
     const serviceType = watch("serviceType");
 
-    // Prefill person from query param
+    const {
+        data: personLicenses,
+        isLoading: isLoadingLicenses,
+        isError: isLicensesError,
+    } = usePersonLicenses(selectedPerson?.nationalNumber);
+
     useEffect(() => {
         if (prefillPersonId) {
             personService.getById(prefillPersonId).then((response) => {
@@ -137,7 +142,6 @@ const RequestForm = () => {
                     </div>
 
                     <div className="space-y-5">
-
                         <div>
                             <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
                                 Personne
@@ -154,6 +158,7 @@ const RequestForm = () => {
                                         onClick={() => {
                                             setSelectedPerson(null);
                                             setValue("personId", null);
+                                            setValue("licenseId", null);
                                         }}
                                         className="text-xs text-red-500 hover:underline"
                                     >
@@ -271,15 +276,39 @@ const RequestForm = () => {
                         {LICENSE_ID_SERVICE_TYPES.includes(serviceType) && (
                             <div>
                                 <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                                    Permis concerné (ID)
+                                    Permis concerné
                                 </label>
-                                <input
-                                    type="number"
-                                    placeholder="Ex: 45"
-                                    {...register("licenseId")}
-                                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                             focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
-                                />
+
+                                {!selectedPerson ? (
+                                    <p className="text-xs text-gray-400">
+                                        Veuillez d'abord sélectionner une personne.
+                                    </p>
+                                ) : isLoadingLicenses ? (
+                                    <p className="text-xs text-gray-400">Chargement des permis...</p>
+                                ) : isLicensesError || !personLicenses || personLicenses.length === 0 ? (
+                                    <p className="text-xs text-red-500">
+                                        Aucun permis trouvé pour cette personne.
+                                    </p>
+                                ) : (
+                                    <select
+                                        {...register("licenseId")}
+                                        defaultValue=""
+                                        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
+                                 focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
+                                    >
+                                        <option value="" disabled>
+                                            Sélectionner un permis
+                                        </option>
+                                        {personLicenses.map((license) => (
+                                            <option key={license.id} value={license.id}>
+                                                {license.licenseNumber} — {license.licenseCategoryName} (expire le{" "}
+                                                {new Date(license.expirationDate).toLocaleDateString("fr-FR")})
+                                                {license.blockingStatus === "BLOCKED" ? " — BLOQUÉ" : ""}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+
                                 {errors.licenseId && (
                                     <p className="text-red-500 text-xs mt-1">{errors.licenseId.message}</p>
                                 )}
