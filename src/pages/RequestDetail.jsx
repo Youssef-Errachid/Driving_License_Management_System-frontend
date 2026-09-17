@@ -1,13 +1,15 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, FileText, ClipboardList, Award } from "lucide-react";
+import { ArrowLeft, FileText, Award } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { useRequest } from "../hooks/useRequest";
 import { useRequestExams } from "../hooks/useRequestExams";
 import { useLicenseCategories } from "../hooks/useLicenseCategories";
+import { useExamTypeConfigs } from "../hooks/useExamTypeConfigs";
 import requestService from "../api/services/requestService";
 import StatusBadge from "../components/StatusBadge";
+import ExamTimeline from "../components/ExamTimeline";
 
 const SERVICE_TYPE_LABELS = {
     NEW_LICENSE: "Nouveau Permis",
@@ -17,17 +19,6 @@ const SERVICE_TYPE_LABELS = {
     DAMAGED_DUPLICATE: "Duplicata endommagé",
     UNBLOCKING: "Déblocage",
     INTERNATIONAL_LICENSE: "Permis international",
-};
-
-const EXAM_TYPE_LABELS = {
-    VISION: "Vue",
-    THEORY: "Théorique",
-    PRACTICAL: "Pratique",
-};
-
-const EXAM_RESULT_LABELS = {
-    PASSED: { label: "Réussi", className: "bg-green-50 text-green-700 border border-green-200" },
-    FAILED: { label: "Échoué", className: "bg-red-50 text-red-700 border border-red-200" },
 };
 
 const formatDate = (dateStr) => {
@@ -43,6 +34,17 @@ const RequestDetail = () => {
     const { data: request, isLoading, isError } = useRequest(id);
     const { data: exams, isLoading: isLoadingExams } = useRequestExams(id);
     const { data: categories } = useLicenseCategories();
+    const { data: examConfigs } = useExamTypeConfigs();
+
+    const practicalFee = request?.licenseCategoryId
+        ? categories?.find((c) => c.id === request.licenseCategoryId)?.fee
+        : null;
+
+    const feeMap = {
+        VISION: examConfigs?.find((c) => c.examType === "VISION")?.fee,
+        THEORY: examConfigs?.find((c) => c.examType === "THEORY")?.fee,
+        PRACTICAL: practicalFee,
+    };
 
     const categoryMap = (categories || []).reduce((acc, c) => {
         acc[c.id] = c.name;
@@ -227,55 +229,19 @@ const RequestDetail = () => {
                 </div>
 
                 <div className="bg-[#efece5] rounded-2xl border border-gray-200 p-6">
-                    <div className="flex items-center gap-2 mb-5">
-                        <ClipboardList className="h-5 w-5 text-dlms-navy" strokeWidth={1.75} />
-                        <h3 className="text-base font-bold text-gray-900">Parcours des examens</h3>
+                    <div className="mb-5">
+                        <h3 className="text-base font-bold text-gray-900">Parcours des Examens</h3>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                            Suivi de la progression du candidat pour l'obtention du permis.
+                        </p>
                     </div>
 
-                    {isLoadingExams ? (
-                        <p className="text-sm text-gray-400">Chargement...</p>
-                    ) : exams && exams.length > 0 ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead>
-                                <tr className="text-left text-xs font-semibold uppercase text-gray-500 border-b border-gray-300">
-                                    <th className="py-2 pr-4">Type</th>
-                                    <th className="py-2 pr-4">Rendez-vous</th>
-                                    <th className="py-2 pr-4">Résultat</th>
-                                    <th className="py-2 pr-4">Date résultat</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {exams.map((exam) => (
-                                    <tr key={exam.id} className="border-b border-gray-200 last:border-0">
-                                        <td className="py-2.5 pr-4 font-medium text-gray-800">
-                                            {EXAM_TYPE_LABELS[exam.examType] || exam.examType}
-                                        </td>
-                                        <td className="py-2.5 pr-4 text-gray-600">
-                                            {formatDate(exam.appointmentDate)}
-                                        </td>
-                                        <td className="py-2.5 pr-4">
-                                            {exam.examResult ? (
-                                                <span
-                                                    className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${EXAM_RESULT_LABELS[exam.examResult]?.className}`}
-                                                >
-                    {EXAM_RESULT_LABELS[exam.examResult]?.label}
-                </span>
-                                            ) : (
-                                                <span className="text-gray-400 text-xs">En attente</span>
-                                            )}
-                                        </td>
-                                        <td className="py-2.5 pr-4 text-gray-600">
-                                            {formatDate(exam.resultDate)}
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <p className="text-sm text-gray-400">Aucun examen planifié pour cette demande.</p>
-                    )}
+                    <ExamTimeline
+                        requestId={id}
+                        exams={exams}
+                        isLoadingExams={isLoadingExams}
+                        feeMap={feeMap}
+                    />
                 </div>
 
                 {request.licenseNumber && (
