@@ -15,6 +15,7 @@ import PersonForm from "../pages/PersonForm.jsx";
 import PersonDetail from "../pages/PersonDetail.jsx";
 import RequestList from "../pages/RequestList.jsx";
 import RequestDetail from "../pages/RequestDetail.jsx";
+import RequestForm from "../pages/RequestForm.jsx";
 
 export default function AppRouter() {
     return (
@@ -50,6 +51,7 @@ export default function AppRouter() {
                             <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
 
                             <Route path="/agent/requests/:id" element={<RequestDetail />} />
+                            <Route path="/agent/requests/new" element={<RequestForm />} />
                             <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
                             <Route path="/agent/licenses/new" element={<ComingSoon title="Delivrer un permis" />} />
                             <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />
