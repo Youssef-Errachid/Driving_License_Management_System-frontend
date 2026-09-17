@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import cloudinaryService from "../api/services/cloudinaryService";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useParams, Link } from "react-router-dom";
@@ -25,10 +26,15 @@ const PersonForm = () => {
         register,
         handleSubmit,
         reset,
+        setValue,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(isEditMode ? personUpdateSchema : personSchema),
     });
+
+    const [isUploading, setIsUploading] = useState(false);
+    const photoUrl = watch("photo");
 
     useEffect(() => {
         if (isEditMode && existingPerson) {
@@ -44,6 +50,21 @@ const PersonForm = () => {
             });
         }
     }, [isEditMode, existingPerson, reset]);
+
+    const handlePhotoChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const url = await cloudinaryService.uploadImage(file);
+            setValue("photo", url, { shouldValidate: true });
+        } catch {
+            toast.error("Échec du téléversement de la photo. Veuillez réessayer.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const mutation = useMutation({
         mutationFn: (data) => {
@@ -209,15 +230,35 @@ const PersonForm = () => {
 
                         <div className="sm:col-span-2">
                             <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                                Photo (URL)
+                                Photo
                             </label>
-                            <input
-                                type="text"
-                                placeholder="https://..."
-                                {...register("photo")}
-                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                           focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
-                            />
+
+                            <div className="flex items-center gap-4">
+                                {photoUrl && (
+                                    <img
+                                        src={photoUrl}
+                                        alt="Aperçu"
+                                        className="h-16 w-16 rounded-full object-cover border border-gray-200"
+                                    />
+                                )}
+
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handlePhotoChange}
+                                    disabled={isUploading}
+                                    className="text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg
+                                               file:border-0 file:bg-dlms-navy file:text-white file:text-sm file:font-semibold
+                                               hover:file:bg-dlms-navy/90"
+                                />
+                                {isUploading && (
+                                    <span className="text-xs text-gray-400">Téléversement...</span>
+                                )}
+                            </div>
+
+                            {/* champ réel envoyé avec le formulaire */}
+                            <input type="hidden" {...register("photo")} />
+
                             {errors.photo && (
                                 <p className="text-red-500 text-xs mt-1">{errors.photo.message}</p>
                             )}
@@ -292,7 +333,7 @@ const PersonForm = () => {
                     </Link>
                     <button
                         type="submit"
-                        disabled={isSubmitting || mutation.isPending}
+                        disabled={isSubmitting || mutation.isPending || isUploading}
                         className="px-6 py-2.5 rounded-lg bg-dlms-amber text-white text-sm font-semibold
                        hover:bg-dlms-amber/90 transition-colors disabled:opacity-60"
                     >
