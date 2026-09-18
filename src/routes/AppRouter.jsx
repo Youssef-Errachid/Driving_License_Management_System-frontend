@@ -18,6 +18,7 @@ import RequestDetail from "../pages/RequestDetail.jsx";
 import RequestForm from "../pages/RequestForm.jsx";
 import ExamTypeSettings from "../pages/ExamTypeSettings.jsx";
 import ExamList from "../pages/ExamList.jsx";
+import DriverList from "../pages/DriverList.jsx";
 
 export default function AppRouter() {
     return (
@@ -50,7 +51,7 @@ export default function AppRouter() {
                             <Route path="/agent/requests" element={<RequestList />} />
                             <Route path="/agent/exams" element={<ExamList />} />
                             <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
-                            <Route path="/agent/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
+                            +<Route path="/agent/drivers" element={<DriverList />} />
 
                             <Route path="/agent/requests/:id" element={<RequestDetail />} />
                             <Route path="/agent/requests/new" element={<RequestForm />} />
