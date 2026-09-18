@@ -19,6 +19,8 @@ import RequestForm from "../pages/RequestForm.jsx";
 import ExamTypeSettings from "../pages/ExamTypeSettings.jsx";
 import ExamList from "../pages/ExamList.jsx";
 import DriverList from "../pages/DriverList.jsx";
+import UserList from "../pages/UserList.jsx";
+import UserForm from "../pages/UserForm.jsx";
 
 export default function AppRouter() {
     return (
@@ -38,8 +40,8 @@ export default function AppRouter() {
                             <Route path="/admin/exams" element={<ComingSoon title="Gestion des examens" />} />
                             <Route path="/admin/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
-                            <Route path="/admin/users" element={<ComingSoon title="Gestion des utilisateurs" />} />
-                            <Route path="/admin/settings" element={<ExamTypeSettings />} />
+                            <Route path="/admin/users" element={<UserList />} />
+                            <Route path="/admin/users/new" element={<UserForm />} />                            <Route path="/admin/settings" element={<ExamTypeSettings />} />
                         </Route>
 
                         <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
