@@ -10,6 +10,11 @@ const licenseService = {
     getByDriverId: (driverId) => {
         return api.get(`/licenses/driver/${driverId}`);
     },
+    getAll: ({ blockingStatus, issueReason, query, page = 0, size = 10 } = {}) => {
+        return api.get("/licenses", {
+            params: { blockingStatus, issueReason, query, page, size },
+        });
+    },
 };
 
 export default licenseService;

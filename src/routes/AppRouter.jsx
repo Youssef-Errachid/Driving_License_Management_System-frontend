@@ -22,6 +22,8 @@ import DriverList from "../pages/DriverList.jsx";
 import UserList from "../pages/UserList.jsx";
 import UserForm from "../pages/UserForm.jsx";
 import LicenseForm from "../pages/LicenseForm.jsx";
+import LicenseList from "../pages/LicenseList.jsx";
+import LicenseDetail from "../pages/LicenseDetail.jsx";
 
 export default function AppRouter() {
     return (
@@ -53,13 +55,14 @@ export default function AppRouter() {
                             <Route path="/agent/persons/:id" element={<PersonDetail />} />
                             <Route path="/agent/requests" element={<RequestList />} />
                             <Route path="/agent/exams" element={<ExamList />} />
-                            <Route path="/agent/licenses" element={<ComingSoon title="Gestion des permis" />} />
+                            <Route path="/agent/licenses" element={<LicenseList />} />
                             +<Route path="/agent/drivers" element={<DriverList />} />
 
                             <Route path="/agent/requests/:id" element={<RequestDetail />} />
                             <Route path="/agent/requests/new" element={<RequestForm />} />
                             <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
                             <Route path="/agent/licenses/new" element={<LicenseForm />} />
+                            <Route path="/agent/licenses/:id" element={<LicenseDetail />} />
                             <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />
                         </Route>
                     </Route>
