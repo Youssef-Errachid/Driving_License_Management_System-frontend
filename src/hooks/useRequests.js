@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import requestService from "../api/services/requestService";
 
-export function useRequests({ status, serviceType, nationalNumber, page = 0, size = 10 } = {}) {
+export function useRequests({ status, serviceType, nationalNumber, page = 0, size = 10, enabled = true } = {}) {
     return useQuery({
         queryKey: ["requests", "list", { status, serviceType, nationalNumber, page, size }],
         queryFn: async () => {
@@ -9,5 +9,6 @@ export function useRequests({ status, serviceType, nationalNumber, page = 0, siz
             return response.data.data;
         },
         keepPreviousData: true,
+        enabled,
     });
 }
