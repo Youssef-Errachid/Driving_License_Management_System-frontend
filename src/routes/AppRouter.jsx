@@ -24,6 +24,7 @@ import UserForm from "../pages/UserForm.jsx";
 import LicenseForm from "../pages/LicenseForm.jsx";
 import LicenseList from "../pages/LicenseList.jsx";
 import LicenseDetail from "../pages/LicenseDetail.jsx";
+import PaymentForm from "../pages/PaymentForm.jsx";
 
 export default function AppRouter() {
     return (
@@ -63,7 +64,7 @@ export default function AppRouter() {
                             <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
                             <Route path="/agent/licenses/new" element={<LicenseForm />} />
                             <Route path="/agent/licenses/:id" element={<LicenseDetail />} />
-                            <Route path="/agent/payments/new" element={<ComingSoon title="Enregistrer un paiement" />} />
+                            <Route path="/agent/payments/new" element={<PaymentForm />} />
                         </Route>
                     </Route>
 
