@@ -25,6 +25,7 @@ import LicenseForm from "../pages/LicenseForm.jsx";
 import LicenseList from "../pages/LicenseList.jsx";
 import LicenseDetail from "../pages/LicenseDetail.jsx";
 import PaymentForm from "../pages/PaymentForm.jsx";
+import LicenseBlockForm from "../pages/LicenseBlockForm.jsx";
 
 export default function AppRouter() {
     return (
@@ -45,7 +46,8 @@ export default function AppRouter() {
                             <Route path="/admin/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
                             <Route path="/admin/users" element={<UserList />} />
-                            <Route path="/admin/users/new" element={<UserForm />} />                            <Route path="/admin/settings" element={<ExamTypeSettings />} />
+                            <Route path="/admin/users/new" element={<UserForm />} />
+                            <Route path="/admin/settings" element={<ExamTypeSettings />} />
                         </Route>
 
                         <Route element={<RoleGuard allowedRoles={["AGENT"]} />}>
@@ -61,8 +63,8 @@ export default function AppRouter() {
 
                             <Route path="/agent/requests/:id" element={<RequestDetail />} />
                             <Route path="/agent/requests/new" element={<RequestForm />} />
-                            <Route path="/agent/exams/new" element={<ComingSoon title="Planifier un examen" />} />
                             <Route path="/agent/licenses/new" element={<LicenseForm />} />
+                            <Route path="/agent/licenses/block" element={<LicenseBlockForm />} />
                             <Route path="/agent/licenses/:id" element={<LicenseDetail />} />
                             <Route path="/agent/payments/new" element={<PaymentForm />} />
                         </Route>

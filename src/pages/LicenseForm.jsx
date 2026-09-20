@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import licenseSchema, { LICENSE_ISSUING_SERVICE_TYPES } from "../validation/licenseSchema";
 import licenseService from "../api/services/licenseService";
 import personService from "../api/services/personService";
-import cloudinaryService from "../api/services/cloudinaryService";
 import { useRequests } from "../hooks/useRequests";
 import { useLicenseCategories } from "../hooks/useLicenseCategories";
 
@@ -32,22 +31,16 @@ const LicenseForm = () => {
     const [personResults, setPersonResults] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
     const [isSearchingPerson, setIsSearchingPerson] = useState(false);
-    const [isUploading, setIsUploading] = useState(false);
 
     const {
         register,
         handleSubmit,
         setValue,
-        watch,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(licenseSchema),
     });
 
-    const holderPhoto = watch("holderPhoto");
-
-    // Seules les demandes au statut NEW peuvent donner lieu à une délivrance de permis
-    // (voir LicenseServiceImpl.create : "only a request with status NEW can result in a license issuance")
     const { data: requestsPage, isLoading: isLoadingRequests } = useRequests({
         status: "NEW",
         nationalNumber: selectedPerson?.nationalNumber,
@@ -64,7 +57,6 @@ const LicenseForm = () => {
         return acc;
     }, {});
 
-    // Préremplissage de la personne depuis ?personId= (ex: PersonActionsMenu, AgentDashboard)
     useEffect(() => {
         if (prefillPersonId) {
             personService.getById(prefillPersonId).then((response) => {
@@ -104,27 +96,12 @@ const LicenseForm = () => {
         setValue("requestId", null);
     };
 
-    const handlePhotoChange = async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setIsUploading(true);
-        try {
-            const url = await cloudinaryService.uploadImage(file);
-            setValue("holderPhoto", url, { shouldValidate: true });
-        } catch {
-            toast.error("Échec du téléversement de la photo. Veuillez réessayer.");
-        } finally {
-            setIsUploading(false);
-        }
-    };
-
     const mutation = useMutation({
         mutationFn: (data) => {
             const payload = {
                 requestId: data.requestId,
-                conditions: data.conditions || null,
-                holderPhoto: data.holderPhoto || null,
+                conditions: null,
+                holderPhoto: null,
             };
             return licenseService.create(payload);
         },
@@ -258,69 +235,6 @@ const LicenseForm = () => {
                     </div>
                 </div>
 
-                {selectedPerson && (
-                    <div className="bg-[#efece5] rounded-2xl border border-gray-200 p-6">
-                        <div className="flex items-center gap-2 mb-5">
-                            <Award className="h-5 w-5 text-dlms-navy" strokeWidth={1.75} />
-                            <h2 className="text-base font-bold text-gray-900">Détails du permis</h2>
-                        </div>
-
-                        <div className="space-y-5">
-                            <div>
-                                <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                                    Conditions (optionnel)
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Ex: Port de lunettes obligatoire"
-                                    {...register("conditions")}
-                                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                             focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
-                                />
-                                {errors.conditions && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.conditions.message}</p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                                    Photo du titulaire (optionnel)
-                                </label>
-
-                                <div className="flex items-center gap-4">
-                                    {holderPhoto && (
-                                        <img
-                                            src={holderPhoto}
-                                            alt="Aperçu"
-                                            className="h-16 w-16 rounded-full object-cover border border-gray-200"
-                                        />
-                                    )}
-
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handlePhotoChange}
-                                        disabled={isUploading}
-                                        className="text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg
-                                               file:border-0 file:bg-dlms-navy file:text-white file:text-sm file:font-semibold
-                                               hover:file:bg-dlms-navy/90"
-                                    />
-                                    {isUploading && (
-                                        <span className="text-xs text-gray-400">Téléversement...</span>
-                                    )}
-                                </div>
-
-                                {/* champ réel envoyé avec le formulaire */}
-                                <input type="hidden" {...register("holderPhoto")} />
-
-                                {errors.holderPhoto && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.holderPhoto.message}</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 <div className="flex items-center justify-end gap-3">
                     <Link
                         to="/agent/requests"
@@ -331,7 +245,7 @@ const LicenseForm = () => {
                     </Link>
                     <button
                         type="submit"
-                        disabled={isSubmitting || mutation.isPending || isUploading}
+                        disabled={isSubmitting || mutation.isPending}
                         className="px-6 py-2.5 rounded-lg bg-dlms-amber text-white text-sm font-semibold
                        hover:bg-dlms-amber/90 transition-colors disabled:opacity-60"
                     >

@@ -17,7 +17,7 @@ const formattedToday = () =>
 const QUICK_ACTIONS = [
     { label: "Enregistrer une personne", icon: UserPlus, to: "/agent/persons/new" },
     { label: "Nouvelle demande", icon: PlusCircle, to: "/agent/requests/new" },
-    { label: "Planifier un examen", icon: Calendar, to: "/agent/exams/new" },
+    { label: "Planifier un examen", icon: Calendar, to: "/agent/exams" },
     { label: "Délivrer un permis", icon: Briefcase, to: "/agent/licenses/new" },
     { label: "Enregistrer un paiement", icon: CreditCard, to: "/agent/payments/new" },
 ];
@@ -59,13 +59,13 @@ const AgentDashboard = () => {
                     </p>
                 </div>
 
-                <button
-                    type="button"
+                <Link
+                    to="/agent/licenses/block"
                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                     <Ban className="h-4 w-4" />
                     Bloquer un permis
-                </button>
+                </Link>
             </div>
 
             {isError && (
