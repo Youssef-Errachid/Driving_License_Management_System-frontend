@@ -48,6 +48,7 @@ const UserForm = () => {
     const handleSelectPerson = (person) => {
         setSelectedPerson(person);
         setValue("personId", person.id);
+        setValue("email", person.email);
         setPersonResults([]);
         setPersonQuery("");
     };
@@ -57,7 +58,6 @@ const UserForm = () => {
             {
                 personId: data.personId,
                 email: data.email,
-                password: data.password,
                 role: data.role,
             },
             {
@@ -87,6 +87,10 @@ const UserForm = () => {
                         <h2 className="text-base font-bold text-gray-900">Détails du compte</h2>
                     </div>
 
+                    <p className="text-xs text-gray-500 mb-4">
+                        Un mot de passe sera généré automatiquement et envoyé à l'adresse email de l'utilisateur.
+                    </p>
+
                     <div className="space-y-5">
                         <div>
                             <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
@@ -105,6 +109,7 @@ const UserForm = () => {
                                         onClick={() => {
                                             setSelectedPerson(null);
                                             setValue("personId", null);
+                                            setValue("email", "");
                                         }}
                                         className="text-xs text-red-500 hover:underline"
                                     >
@@ -155,44 +160,17 @@ const UserForm = () => {
                             <input
                                 type="email"
                                 {...register("email")}
+                                readOnly={!!selectedPerson}
                                 placeholder="exemple@dlms.ma"
-                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                           focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
+                                className={`w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm
+                           focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy
+                           ${selectedPerson ? "bg-gray-100 cursor-not-allowed" : "bg-white"}`}
                             />
                             {errors.email && (
                                 <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
                             )}
                         </div>
 
-                        <div>
-                            <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                                Mot de passe
-                            </label>
-                            <input
-                                type="password"
-                                {...register("password")}
-                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                           focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
-                            />
-                            {errors.password && (
-                                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
-                            )}
-                        </div>
-                        <div>
-                             <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
-                             Confirmer le mot de passe
-                             </label>
-                             <input
-                                                           type="password"
-                             {...register("confirmPassword")}
-                             className="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm
-                             focus:outline-none focus:ring-2 focus:ring-dlms-navy/30 focus:border-dlms-navy"
-                             />
-                             {errors.confirmPassword && (
-                            <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
-                            )}
-
-                        </div>
                         <div>
                             <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
                                 Rôle

@@ -13,6 +13,9 @@ const userService = {
     update: (id, data) => {
         return api.put(`/users/${id}`, data);
     },
+    changePassword: (data) => {
+        return api.put("/users/me/password", data);
+    },
     delete: (id) => {
         return api.delete(`/users/${id}`);
     },

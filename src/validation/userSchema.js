@@ -13,15 +13,6 @@ const userSchema = yup.object({
         .email("Email invalide")
         .required("L'email est obligatoire"),
 
-    password: yup
-        .string()
-        .required("Le mot de passe est obligatoire"),
-
-    confirmPassword: yup
-        .string()
-        .oneOf([yup.ref("password")], "Les mots de passe ne correspondent pas")
-        .required("La confirmation du mot de passe est obligatoire"),
-
     role: yup
         .string()
         .oneOf(ROLES, "Rôle invalide")

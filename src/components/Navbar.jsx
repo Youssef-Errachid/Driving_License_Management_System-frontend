@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOut, ChevronDown } from "lucide-react";
+import { LogOut, ChevronDown, KeyRound } from "lucide-react";
 import { useAuth } from "../context/useAuth.js";
 import dlmsLogo from "../assets/dlms-logo.png";
 
@@ -108,6 +108,17 @@ const Navbar = () => {
                                 <p className="text-sm font-semibold text-gray-900">{user?.fullName}</p>
                                 <p className="text-xs text-gray-500">{user?.role}</p>
                             </div>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                    navigate("/change-password");
+                                }}
+                                className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                                <KeyRound className="h-4 w-4" />
+                                Changer le mot de passe
+                            </button>
                             <button
                                 type="button"
                                 onClick={handleLogout}
