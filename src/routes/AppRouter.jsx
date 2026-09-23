@@ -26,6 +26,7 @@ import LicenseList from "../pages/LicenseList.jsx";
 import LicenseDetail from "../pages/LicenseDetail.jsx";
 import PaymentForm from "../pages/PaymentForm.jsx";
 import LicenseBlockForm from "../pages/LicenseBlockForm.jsx";
+import ChangePassword from "../pages/ChangePassword.jsx";
 
 export default function AppRouter() {
     return (
@@ -39,6 +40,7 @@ export default function AppRouter() {
                     <Route path="/access-denied" element={<AccessDenied />} />
 
                     <Route element={<ProtectedRoute />}>
+                        <Route path="/change-password" element={<ChangePassword />} />
                         <Route element={<RoleGuard allowedRoles={["ADMIN"]} />}>
                             <Route path="/admin/dashboard" element={<AdminDashboard />} />
                             <Route path="/admin/requests" element={<ComingSoon title="Gestion des demandes" />} />
@@ -59,7 +61,7 @@ export default function AppRouter() {
                             <Route path="/agent/requests" element={<RequestList />} />
                             <Route path="/agent/exams" element={<ExamList />} />
                             <Route path="/agent/licenses" element={<LicenseList />} />
-                            +<Route path="/agent/drivers" element={<DriverList />} />
+                            <Route path="/agent/drivers" element={<DriverList />} />
 
                             <Route path="/agent/requests/:id" element={<RequestDetail />} />
                             <Route path="/agent/requests/new" element={<RequestForm />} />
