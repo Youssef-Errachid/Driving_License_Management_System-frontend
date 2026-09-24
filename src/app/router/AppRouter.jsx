@@ -28,6 +28,7 @@ import PaymentForm from "../../features/payments/pages/PaymentForm.jsx";
 import LicenseBlockForm from "../../features/licenses/pages/LicenseBlockForm.jsx";
 import ChangePassword from "../../features/auth/pages/ChangePassword.jsx";
 import AdminRequestList from "../../features/requests/pages/AdminRequestList.jsx";
+import AdminExamList from "../../features/exams/pages/AdminExamList.jsx";
 
 export default function AppRouter() {
     return (
@@ -45,7 +46,7 @@ export default function AppRouter() {
                         <Route element={<RoleGuard allowedRoles={["ADMIN"]} />}>
                             <Route path="/admin/dashboard" element={<AdminDashboard />} />
                             <Route path="/admin/requests" element={<AdminRequestList />} />
-                            <Route path="/admin/exams" element={<ComingSoon title="Gestion des examens" />} />
+                            <Route path="/admin/exams" element={<AdminExamList />} />
                             <Route path="/admin/licenses" element={<ComingSoon title="Gestion des permis" />} />
                             <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
                             <Route path="/admin/users" element={<UserList />} />
