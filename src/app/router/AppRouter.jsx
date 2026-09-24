@@ -30,6 +30,7 @@ import ChangePassword from "../../features/auth/pages/ChangePassword.jsx";
 import AdminRequestList from "../../features/requests/pages/AdminRequestList.jsx";
 import AdminExamList from "../../features/exams/pages/AdminExamList.jsx";
 import AdminLicenseList from "../../features/licenses/pages/AdminLicenseList.jsx";
+import AdminDriverList from "../../features/drivers/pages/AdminDriverList.jsx";
 
 export default function AppRouter() {
     return (
@@ -49,7 +50,7 @@ export default function AppRouter() {
                             <Route path="/admin/requests" element={<AdminRequestList />} />
                             <Route path="/admin/exams" element={<AdminExamList />} />
                             <Route path="/admin/licenses" element={<AdminLicenseList />} />
-                            <Route path="/admin/drivers" element={<ComingSoon title="Gestion des conducteurs" />} />
+                            <Route path="/admin/drivers" element={<AdminDriverList />} />
                             <Route path="/admin/users" element={<UserList />} />
                             <Route path="/admin/users/new" element={<UserForm />} />
                             <Route path="/admin/settings" element={<ExamTypeSettings />} />
