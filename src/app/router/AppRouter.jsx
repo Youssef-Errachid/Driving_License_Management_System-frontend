@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../../features/auth/pages/Login";
 import AccessDenied from "../../shared/pages/AccessDenied";
 import NotFound from "../../shared/pages/NotFound";
-import ComingSoon from "../../shared/pages/ComingSoon";
 import AdminDashboard from "../../features/dashboard/pages/AdminDashboard";
 import AgentDashboard from "../../features/dashboard/pages/AgentDashboard";
 import ProtectedRoute from "./ProtectedRoute";
@@ -13,24 +12,24 @@ import Layout from "../../shared/components/layout/Layout";
 import PersonList from "../../features/persons/pages/PersonList.jsx";
 import PersonForm from "../../features/persons/pages/PersonForm.jsx";
 import PersonDetail from "../../features/persons/pages/PersonDetail.jsx";
-import RequestList from "../../features/requests/pages/RequestList.jsx";
+import RequestList from "../../features/requests/pages/AgentRequestList.jsx";
 import RequestDetail from "../../features/requests/pages/RequestDetail.jsx";
 import RequestForm from "../../features/requests/pages/RequestForm.jsx";
 import ExamTypeSettings from "../../features/exams/pages/ExamTypeSettings.jsx";
-import ExamList from "../../features/exams/pages/ExamList.jsx";
-import DriverList from "../../features/drivers/pages/DriverList.jsx";
+import ExamList from "../../features/exams/pages/AgentExamList.jsx";
+import DriverList from "../../features/drivers/pages/AgentDriverList.jsx";
 import UserList from "../../features/users/pages/UserList.jsx";
 import UserForm from "../../features/users/pages/UserForm.jsx";
 import LicenseForm from "../../features/licenses/pages/LicenseForm.jsx";
-import LicenseList from "../../features/licenses/pages/LicenseList.jsx";
+import LicenseList from "../../features/licenses/pages/AgentLicenseList.jsx";
 import LicenseDetail from "../../features/licenses/pages/LicenseDetail.jsx";
 import PaymentForm from "../../features/payments/pages/PaymentForm.jsx";
 import LicenseBlockForm from "../../features/licenses/pages/LicenseBlockForm.jsx";
 import ChangePassword from "../../features/auth/pages/ChangePassword.jsx";
-import AdminRequestList from "../../features/requests/pages/AdminRequestList.jsx";
 import AdminExamList from "../../features/exams/pages/AdminExamList.jsx";
-import AdminLicenseList from "../../features/licenses/pages/AdminLicenseList.jsx";
 import AdminDriverList from "../../features/drivers/pages/AdminDriverList.jsx";
+import AdminLicenseList from "../../features/licenses/pages/AdminLicenseList.jsx";
+import AdminRequestList from "../../features/requests/pages/AdminRequestList.jsx";
 
 export default function AppRouter() {
     return (
