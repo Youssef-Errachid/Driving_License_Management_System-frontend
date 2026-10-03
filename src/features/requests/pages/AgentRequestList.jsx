@@ -65,7 +65,7 @@ const RequestList = () => {
     };
 
     const handleCancel = (id) => {
-        if (window.confirm("Voulez-vous vraiment annuler cette demande ?")) {
+        if (window.confirm(`Voulez-vous vraiment annuler la demande #REQ-${id} ? Cette action est définitive.`)) {
             cancelMutation.mutate(id);
         }
     };
@@ -159,7 +159,7 @@ const RequestList = () => {
                                 </p>
 
                                 <div className="flex items-center gap-2">
-                                    {request.requestStatus === "NEW" && (
+                                    {request.requestStatus === "NEW" && !request.hasPayments && (
                                         <button
                                             type="button"
                                             onClick={() => handleCancel(request.id)}
@@ -167,7 +167,7 @@ const RequestList = () => {
                                             className="px-3 py-1.5 rounded-lg border border-red-300 text-red-600 text-xs font-semibold
                                hover:bg-red-50 transition-colors disabled:opacity-50"
                                         >
-                                            Annuler
+                                            Annuler la demande
                                         </button>
                                     )}
                                     <Link

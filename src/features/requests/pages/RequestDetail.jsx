@@ -65,7 +65,11 @@ const RequestDetail = () => {
     });
 
     const handleCancel = () => {
-        if (window.confirm("Voulez-vous vraiment annuler cette demande ?")) {
+        if (
+            window.confirm(
+                `Voulez-vous vraiment annuler la demande #REQ-${request.id} ? Cette action est définitive.`,
+            )
+        ) {
             cancelMutation.mutate();
         }
     };
@@ -215,15 +219,21 @@ const RequestDetail = () => {
 
                     {request.requestStatus === "NEW" && (
                         <div className="flex justify-end mt-5 pt-5 border-t border-gray-300">
-                            <button
-                                type="button"
-                                onClick={handleCancel}
-                                disabled={cancelMutation.isPending}
-                                className="px-4 py-2 rounded-lg border border-red-300 text-red-600 text-sm font-semibold
+                            {request.hasPayments ? (
+                                <p className="text-xs text-gray-500">
+                                    Annulation impossible : des paiements sont déjà enregistrés pour cette demande.
+                                </p>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={handleCancel}
+                                    disabled={cancelMutation.isPending}
+                                    className="px-4 py-2 rounded-lg border border-red-300 text-red-600 text-sm font-semibold
                            hover:bg-red-50 transition-colors disabled:opacity-50"
-                            >
-                                {cancelMutation.isPending ? "..." : "Annuler la demande"}
-                            </button>
+                                >
+                                    {cancelMutation.isPending ? "..." : "Annuler la demande"}
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
