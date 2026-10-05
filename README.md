@@ -17,7 +17,7 @@ Interface web du système de gestion des permis de conduire (DLMS). Application 
 ## Prérequis
 
 - Node.js 18+ et npm
-- Le backend DLMS démarré (API attendue sur `http://localhost:8080/api`, voir `src/api/axios.js`)
+- Le backend DLMS démarré (API attendue sur `http://localhost:8080/api`, voir `src/lib/axios.js`)
 - Un compte Cloudinary (pour l'upload de photos)
 
 ## Installation
@@ -35,9 +35,9 @@ VITE_CLOUDINARY_CLOUD_NAME=<votre_cloud_name>
 VITE_CLOUDINARY_UPLOAD_PRESET=<votre_upload_preset>
 ```
 
-Ces variables sont utilisées par `src/api/services/cloudinaryService.js` pour l'upload direct (unsigned) des photos.
+Ces variables sont utilisées par `src/lib/cloudinaryService.js` pour l'upload direct (unsigned) des photos.
 
-> ⚠️ L'URL de base de l'API (`http://localhost:8080/api`) est actuellement codée en dur dans `src/api/axios.js`. Pour pointer vers un autre environnement, modifier ce fichier.
+> ⚠️ L'URL de base de l'API (`http://localhost:8080/api`) est actuellement codée en dur dans `src/lib/axios.js`. Pour pointer vers un autre environnement, modifier ce fichier.
 
 ## Lancer le projet en local
 
@@ -59,7 +59,7 @@ L'application est servie par défaut sur `http://localhost:5173`.
 ## Authentification & rôles
 
 - Connexion via `POST /api/auth/login` (JWT), token stocké dans `localStorage` (`token`, `user`)
-- Le token est injecté automatiquement dans chaque requête via l'intercepteur Axios (`src/api/axios.js`)
+- Le token est injecté automatiquement dans chaque requête via l'intercepteur Axios (`src/lib/axios.js`)
 - Un `401` provoque la purge du token/user côté client
 - Deux rôles : **ADMIN** et **AGENT**, chacun avec son propre tableau de bord et ses routes protégées (`RoleGuard`, `ProtectedRoute`, `RoleRedirect`)
 
@@ -82,21 +82,47 @@ L'application est servie par défaut sur `http://localhost:5173`.
 
 ## Structure du projet
 
+Le code est organisé par fonctionnalité (feature-based) : chaque domaine métier regroupe ses appels API, hooks, composants, pages et schémas de validation.
+
 ```
 src/
-├── api/
-│   ├── axios.js              # instance Axios + intercepteurs JWT
-│   ├── queryClient.js        # config TanStack Query
-│   └── services/              # un fichier par ressource API (persons, requests, licenses, license-blocks, exams, payments, drivers, users...)
-├── components/                 # composants réutilisables (Layout, StatCard, StatusBadge, RecentRequestsTable, ExamTimeline...)
-├── context/                    # AuthContext / AuthProvider / useAuth
-├── dashboards/                 # AdminDashboard, AgentDashboard
-├── hooks/                       # hooks React Query (useLicenses, useRequests, useExams, useBlockLicense...)
-├── pages/                       # pages/formulaires par ressource (LicenseForm, LicenseBlockForm, RequestForm...)
-├── routes/                      # AppRouter, ProtectedRoute, RoleGuard, RoleRedirect
-├── validation/                  # schémas Yup par formulaire
-├── App.jsx
+├── app/
+│   ├── App.jsx
+│   └── router/                 # AppRouter, ProtectedRoute, RoleGuard, RoleRedirect
+├── assets/                     # logos et illustrations
+├── features/
+│   ├── auth/                   # connexion, changement de mot de passe, AuthContext / AuthProvider / useAuth
+│   ├── dashboard/              # AdminDashboard, AgentDashboard, StatCard, RecentRequestsTable
+│   ├── persons/                # liste, formulaire, fiche détaillée des personnes
+│   ├── requests/               # liste, formulaire, détail des demandes
+│   ├── exams/                  # examens, ExamTimeline, configuration des types d'examens
+│   ├── licenses/               # permis, blocages, catégories de permis
+│   ├── drivers/                # profils conducteurs
+│   ├── payments/               # paiements
+│   └── users/                  # gestion des utilisateurs (Admin)
+├── lib/
+│   ├── axios.js                # instance Axios + intercepteurs JWT
+│   ├── queryClient.js          # config TanStack Query
+│   └── cloudinaryService.js    # upload des photos vers Cloudinary
+├── shared/
+│   ├── components/
+│   │   ├── layout/             # Layout, Navbar, Footer
+│   │   └── ui/                 # StatusBadge
+│   └── pages/                  # AccessDenied, NotFound, ComingSoon
+├── styles/                     # index.css, App.css
 └── main.jsx
+```
+
+Chaque dossier de `features/` suit la même organisation interne (selon les besoins de la fonctionnalité) :
+
+```
+features/<feature>/
+├── api/          # service d'appel à l'API REST
+├── components/   # composants propres à la fonctionnalité
+├── context/      # contexte React (auth uniquement)
+├── hooks/        # hooks React Query
+├── pages/        # pages / formulaires
+└── validation/   # schémas Yup
 ```
 
 ## Notes
