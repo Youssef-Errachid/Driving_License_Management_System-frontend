@@ -55,6 +55,9 @@ const RequestDetail = () => {
         mutationFn: () => requestService.cancel(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["requests"] });
+            queryClient.invalidateQueries({ queryKey: ["exams"] });
+            queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+            queryClient.invalidateQueries({ queryKey: ["agent-dashboard"] });
             toast.success("Demande annulée avec succès");
         },
         onError: (error) => {
